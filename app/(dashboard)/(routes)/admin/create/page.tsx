@@ -2,11 +2,10 @@
 
 
 import { Button } from "@/components/ui/button";
-import {Form, FormControl, FormDescription, FormField, FormItem, FormLabel } from "@/components/ui/form";
+import {Form, FormControl, FormDescription, FormField, FormItem, FormLabel, FormMessage } from "@/components/ui/form";
 import { Input } from "@/components/ui/input";
 import { zodResolver } from "@hookform/resolvers/zod";
 import Link from "next/link";
-import { useState } from "react";
 import {useForm } from "react-hook-form";
 import {z} from "zod";
 
@@ -17,14 +16,14 @@ const formSchema = z.object({
 const JobCreatePage = () => {
 
 
-    const [isLoading, setIsLoading] = useState(false)
-
     const form = useForm<z.infer<typeof formSchema>>({
         resolver: zodResolver(formSchema),
         defaultValues: {
             title: "",
         },
     });
+
+    const {isSubmitting, isValid} = form.formState
 
     const onSubmit = async(values:z.infer<typeof formSchema>) => {
         console.log(values);
@@ -49,7 +48,7 @@ const JobCreatePage = () => {
                             </FormLabel>
                             <FormControl>
                                 <Input
-                                 disabled={isLoading}
+                                 disabled={isSubmitting}
                                  placeholder="e.g:'Full-Stack Developer'"
                                  {...field}
                                 />
@@ -57,6 +56,7 @@ const JobCreatePage = () => {
                             <FormDescription>
                                 Role of this Job
                             </FormDescription>
+                            <FormMessage/>
                         </FormItem>
                     )}
                 />
@@ -66,7 +66,7 @@ const JobCreatePage = () => {
                         Cancel
                     </Button>
                     </Link>
-                    <Button type="submit" disabled={isLoading}>
+                    <Button type="submit" disabled={!isValid || isSubmitting}>
                         Continue
                     </Button>
                 </div>
