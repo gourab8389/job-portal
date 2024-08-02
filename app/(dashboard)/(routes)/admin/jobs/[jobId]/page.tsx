@@ -5,6 +5,7 @@ import Link from 'next/link';
 import { redirect } from 'next/navigation';
 import React from 'react'
 import JobPublishAction from './_components/job-publish-actions';
+import Banner from '@/components/banner';
 
 const JobDetailsPage = async ({params}: {params: {jobId: string}}) => {
 
@@ -55,8 +56,20 @@ const JobDetailsPage = async ({params}: {params: {jobId: string}}) => {
           <h1 className='text-2xl font-medium'>Job Setup</h1>
           <span className='text-sm text-neutral-500'>Complete All Fields {completionText}</span>
         </div>
-        <JobPublishAction/>
+        <JobPublishAction
+        jobId={params.jobId}
+        isPublished={job.isPublished}
+        disabled={!isComplete}
+        />
       </div>
+      {
+        !job.isPublished && (
+          <Banner
+          variant={"warning"}
+          label="This job is unpublished. It will not be visible in the jobs list"
+          />
+        )
+      }
     </div>
   )
 }
