@@ -1,23 +1,25 @@
 import { db } from '@/lib/db';
 import { auth } from '@clerk/nextjs/server';
-import { ArrowLeft } from 'lucide-react';
+import { ArrowLeft, LayoutDashboard } from 'lucide-react';
 import Link from 'next/link';
 import { redirect } from 'next/navigation';
 import React from 'react'
 import JobPublishAction from './_components/job-publish-actions';
 import Banner from '@/components/banner';
+import IconBadge from '@/components/icon-badge';
+import TitleForm from './_components/title-form';
 
-const JobDetailsPage = async ({params}: {params: {jobId: string}}) => {
+const JobDetailsPage = async ({ params }: { params: { jobId: string } }) => {
 
 
   const validObjectRegex = /^[0-9a-fA-F]{24}$/;
-  if(!validObjectRegex.test(params.jobId)){
+  if (!validObjectRegex.test(params.jobId)) {
     return redirect("/admin/jobs");
   }
 
-  const {userId} = auth();
+  const { userId } = auth();
 
-  if(!userId){
+  if (!userId) {
     return redirect("/");
   }
 
@@ -30,7 +32,7 @@ const JobDetailsPage = async ({params}: {params: {jobId: string}}) => {
     }
   )
 
-  if(!job){
+  if (!job) {
     return redirect("admin/jobs");
   }
 
@@ -45,10 +47,10 @@ const JobDetailsPage = async ({params}: {params: {jobId: string}}) => {
   return (
     <div className='p-6'>
       <Link href={'/admin/jobs'}>
-      <div className="flex items-center gap-3 text-sm text-neutral-500">
-        <ArrowLeft className='w-4 h-4'/>
-        Back
-      </div>
+        <div className="flex items-center gap-3 text-sm text-neutral-500">
+          <ArrowLeft className='w-4 h-4' />
+          Back
+        </div>
       </Link>
 
       <div className="flex items-center justify-between my-4">
@@ -57,19 +59,28 @@ const JobDetailsPage = async ({params}: {params: {jobId: string}}) => {
           <span className='text-sm text-neutral-500'>Complete All Fields {completionText}</span>
         </div>
         <JobPublishAction
-        jobId={params.jobId}
-        isPublished={job.isPublished}
-        disabled={!isComplete}
+          jobId={params.jobId}
+          isPublished={job.isPublished}
+          disabled={!isComplete}
         />
       </div>
       {
         !job.isPublished && (
           <Banner
-          variant={"warning"}
-          label="This job is unpublished. It will not be visible in the jobs list"
+            variant={"warning"}
+            label="This job is unpublished. It will not be visible in the jobs list"
           />
         )
       }
+      <div className="grid grid-cols-1 md:grid-cols-2 gap-6 mt-16">
+        <div>
+          <div className="flex items-center gap-x-2">
+            <IconBadge icon={LayoutDashboard} />
+            <h2 className='text-xl text-neutral-700'>Customize your job</h2>
+          </div>
+          <TitleForm initialData={job} jobId={job.id} />
+        </div>
+      </div>
     </div>
   )
 }
