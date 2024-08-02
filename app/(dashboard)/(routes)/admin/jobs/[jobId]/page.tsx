@@ -8,6 +8,7 @@ import JobPublishAction from './_components/job-publish-actions';
 import Banner from '@/components/banner';
 import IconBadge from '@/components/icon-badge';
 import TitleForm from './_components/title-form';
+import CategoryForm from './_components/category-form';
 
 const JobDetailsPage = async ({ params }: { params: { jobId: string } }) => {
 
@@ -32,11 +33,15 @@ const JobDetailsPage = async ({ params }: { params: { jobId: string } }) => {
     }
   )
 
+  const categories = await db.category.findMany({
+    orderBy: { name: "asc" },
+  });
+
   if (!job) {
     return redirect("admin/jobs");
   }
 
-  const requiredFields = [job.title, job.description, job.imageUrl];
+  const requiredFields = [job.title, job.description, job.imageUrl, job.categoryId];
 
   const totalFields = requiredFields.length;
   const completedFields = requiredFields.filter(Boolean).length;
@@ -79,6 +84,15 @@ const JobDetailsPage = async ({ params }: { params: { jobId: string } }) => {
             <h2 className='text-xl text-neutral-700'>Customize your job</h2>
           </div>
           <TitleForm initialData={job} jobId={job.id} />
+
+          <CategoryForm 
+          initialData={job} 
+          jobId={job.id}
+          options={categories.map((category)=>({
+            label: category.name,
+            value:category.id,
+          }))} 
+          />
         </div>
       </div>
     </div>
