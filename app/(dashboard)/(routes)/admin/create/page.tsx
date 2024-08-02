@@ -71,7 +71,7 @@ const JobCreatePage = () => {
                     )}
                 />
                 <div className="flex items-center gap-x-2">
-                    <Link href={'/'}>
+                    <Link href={'/admin/jobs'}>
                     <Button type="button" variant={'ghost'}>
                         Cancel
                     </Button>
