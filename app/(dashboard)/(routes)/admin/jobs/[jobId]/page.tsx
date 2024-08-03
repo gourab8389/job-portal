@@ -12,8 +12,6 @@ import CategoryForm from './_components/category-form';
 import ImageForm from './_components/image-form';
 
 const JobDetailsPage = async ({ params }: { params: { jobId: string } }) => {
-
-
   const validObjectRegex = /^[0-9a-fA-F]{24}$/;
   if (!validObjectRegex.test(params.jobId)) {
     return redirect("/admin/jobs");
@@ -25,14 +23,12 @@ const JobDetailsPage = async ({ params }: { params: { jobId: string } }) => {
     return redirect("/");
   }
 
-  const job = await db.job.findUnique(
-    {
-      where: {
-        id: params.jobId,
-        userId
-      }
+  const job = await db.job.findUnique({
+    where: {
+      id: params.jobId,
+      userId
     }
-  )
+  });
 
   const categories = await db.category.findMany({
     orderBy: { name: "asc" },
@@ -87,17 +83,17 @@ const JobDetailsPage = async ({ params }: { params: { jobId: string } }) => {
           <TitleForm initialData={job} jobId={job.id} />
 
           <CategoryForm 
-          initialData={job} 
-          jobId={job.id}
-          options={categories.map((category)=>({
-            label: category.name,
-            value:category.id,
-          }))} 
+            initialData={{ ...job, categoryId: job.categoryId || "" }} 
+            jobId={job.id}
+            options={categories.map((category) => ({
+              label: category.name,
+              value: category.id,
+            }))} 
           />
 
           <ImageForm 
-          initialData={job} 
-          jobId={job.id}
+            initialData={job} 
+            jobId={job.id}
           />
         </div>
       </div>

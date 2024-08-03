@@ -30,6 +30,7 @@ model Job{
   workMode String?
   categoryId String? @db.ObjectId
   category Category? @relation(fields: [categoryId], references: [id])
+  jobLink String?
   createdAt DateTime @default(now())
   updatedAt DateTime @default(now())
 }

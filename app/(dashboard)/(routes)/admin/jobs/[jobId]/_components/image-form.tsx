@@ -3,7 +3,6 @@
 import ImageUpload from "@/components/image-upload"
 import { Button } from "@/components/ui/button"
 import { Form, FormControl, FormField, FormItem, FormMessage } from "@/components/ui/form"
-import { Input } from "@/components/ui/input"
 import { zodResolver } from "@hookform/resolvers/zod"
 import { Job } from "@prisma/client"
 import axios from "axios"
@@ -16,38 +15,38 @@ import toast from "react-hot-toast"
 import { z } from "zod"
 
 interface ImageFormProps {
-    initialData: Job
-    jobId: string
+  initialData: Job
+  jobId: string
 }
 
 const formSchema = z.object({
   imageUrl: z.string().min(1),
 })
 
-const ImageForm = ({initialData, jobId} : ImageFormProps) => {
+const ImageForm = ({ initialData, jobId }: ImageFormProps) => {
 
   const [isEditing, setIsEditing] = useState(false);
   const router = useRouter();
 
   const form = useForm<z.infer<typeof formSchema>>({
-    resolver : zodResolver(formSchema),
+    resolver: zodResolver(formSchema),
     defaultValues: {
-      imageUrl : initialData?.imageUrl || ""
+      imageUrl: initialData?.imageUrl || ""
     }
   })
 
-  const {isSubmitting, isValid} = form.formState;
+  const { isSubmitting, isValid } = form.formState;
 
   const onSubmit = async (values: z.infer<typeof formSchema>) => {
     try {
       const response = await axios.patch(`/api/jobs/${jobId}`, values);
-      if(response.status !== 200){
+      if (response.status !== 200) {
         toast.error("Job not updated")
         return;
       }
       toast.success("Job Updated");
       router.refresh();
-      setIsEditing(false); 
+      setIsEditing(false);
     } catch (error) {
       toast.error("Something went wrong");
     }
@@ -64,7 +63,7 @@ const ImageForm = ({initialData, jobId} : ImageFormProps) => {
             <>Cancel</>
           ) : (
             <>
-              <Pencil className="w-4 h-4 mr-2"/>
+              <Pencil className="w-4 h-4 mr-2" />
               Edit
             </>
           )}
@@ -73,39 +72,36 @@ const ImageForm = ({initialData, jobId} : ImageFormProps) => {
 
       {!isEditing && (!initialData.imageUrl ? (
         <div className="flex items-center justify-center h-60 bg-neutral-200 rounded-md">
-        <ImageIcon className="h-10 w-10 text-neutral-500"/>
-      </div>
-      ) 
-      : 
-      (
-      <div className="relative w-full h-60 aspect-video mt-2">
-        <Image
-        alt="Cover Image"
-        fill
-        className="w-full h-full object-cover"
-        src={initialData?.imageUrl}
-        />
-      </div>
-      )
-      )}
+          <ImageIcon className="h-10 w-10 text-neutral-500" />
+        </div>
+      ) : (
+        <div className="relative w-full h-60 aspect-video mt-2">
+          <Image
+            alt="Cover Image"
+            fill
+            className="w-full h-full object-cover"
+            src={initialData?.imageUrl}
+          />
+        </div>
+      ))}
 
       {isEditing && (
         <Form {...form}>
           <form onSubmit={form.handleSubmit(onSubmit)} className="space-y-4">
-            <FormField 
+            <FormField
               control={form.control}
               name="imageUrl"
-              render={({field}) => (
+              render={({ field }) => (
                 <FormItem>
                   <FormControl>
                     <ImageUpload
-                    value={field.value}
-                    disabled={isSubmitting}
-                    onChange={(url)=> field.onChange(url)}
-                    onRemove={()=> field.onChange("")}
+                      value={field.value}
+                      disabled={isSubmitting}
+                      onChange={(url) => field.onChange(url)}
+                      onRemove={() => field.onChange("")}
                     />
                   </FormControl>
-                  <FormMessage/>
+                  <FormMessage />
                 </FormItem>
               )}
             />
@@ -121,4 +117,4 @@ const ImageForm = ({initialData, jobId} : ImageFormProps) => {
   )
 }
 
-export default ImageForm
+export default ImageForm;
