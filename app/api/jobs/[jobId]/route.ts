@@ -7,7 +7,7 @@ export const PATCH = async (req: Request, { params }: { params: { jobId: string 
     const { userId } = auth();
     const { jobId } = params;
 
-    const { title, categoryId, imageUrl, jobLink, short_description } = await req.json();
+    const { title, categoryId, category, imageUrl, jobLink, short_description} = await req.json();
 
     if (!userId) {
       return new NextResponse("Unauthorized", { status: 401 });
@@ -21,7 +21,7 @@ export const PATCH = async (req: Request, { params }: { params: { jobId: string 
         id: jobId,
         userId,
       },
-      data: { title, categoryId, imageUrl, jobLink, short_description },
+      data: { title, categoryId, category, imageUrl, jobLink, short_description},
     });
 
     return NextResponse.json(job);

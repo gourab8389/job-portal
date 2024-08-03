@@ -1,8 +1,9 @@
-"use client"
+"use client";
 
 import { Button } from "@/components/ui/button";
 import { Form, FormControl, FormField, FormItem, FormMessage } from "@/components/ui/form";
 import { Textarea } from "@/components/ui/textarea";
+import getGenerativeAIResponse from "@/scripts/aistudio";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { Job } from "@prisma/client";
 
@@ -27,7 +28,7 @@ const ShortDescription = ({ initialData, jobId }: ShortDescriptionProps) => {
 
   const [isEditing, setIsEditing] = useState(false);
   const [prompt, setPrompt] = useState("");
-  const [isPrompting, setIsPrompting] = useState(false)
+  const [isPrompting, setIsPrompting] = useState(false);
   const router = useRouter();
 
   const form = useForm<z.infer<typeof formSchema>>({
@@ -55,8 +56,18 @@ const ShortDescription = ({ initialData, jobId }: ShortDescriptionProps) => {
   const toggleEditing = () => setIsEditing((current) => !current);
 
   const handlePromptGeneration = async () => {
-
-  }
+    try {
+      setIsPrompting(true);
+      const customPrompt = `Could you craft a concise job description for a ${prompt} position in fewer than 400 characters?`;
+      const data = await getGenerativeAIResponse(customPrompt);
+      form.setValue("short_description", data);
+      setIsPrompting(false);
+    } catch (error) {
+      console.log(error);
+      toast.error("Something went wrong...");
+      setIsPrompting(false);
+    }
+  };
 
   return (
     <div className="mt-6 border bg-neutral-100 rounded-md p-4">
@@ -78,13 +89,13 @@ const ShortDescription = ({ initialData, jobId }: ShortDescriptionProps) => {
         <>
         <div className="flex items-center gap-2 my-2">
           <input type="text" placeholder="e.g 'Full Stack Developer'" value={prompt} onChange={(e)=>setPrompt(e.target.value)} className="w-full p-2 rounded-md"/>
-          {isPrompting ? (<>
-          <Button><Loader2 className="w-4 h-4 animate-spin"/></Button>
-          </>) : (<>
-          <Button onClick={handlePromptGeneration}>
-            <Lightbulb className="w-4 h-4"/>
-          </Button>
-          </>)}
+          {isPrompting ? (
+            <Button><Loader2 className="w-4 h-4 animate-spin"/></Button>
+          ) : (
+            <Button onClick={handlePromptGeneration}>
+              <Lightbulb className="w-4 h-4"/>
+            </Button>
+          )}
         </div>
         <p className="text-xs text-muted-foreground text-right">Note*: Profession Name alone enough to generate the tags</p>
         <Form {...form}>
@@ -95,7 +106,7 @@ const ShortDescription = ({ initialData, jobId }: ShortDescriptionProps) => {
               render={({ field }) => (
                 <FormItem>
                   <FormControl>
-                    <Textarea disabled={isSubmitting} placeholder="Short description about the job" className="mt-2"/>
+                    <Textarea {...field} disabled={isSubmitting} placeholder="Short description about the job" className="mt-2"/>
                   </FormControl>
                   <FormMessage />
                 </FormItem>
