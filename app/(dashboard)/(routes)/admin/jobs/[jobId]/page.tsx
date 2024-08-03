@@ -10,6 +10,7 @@ import IconBadge from '@/components/icon-badge';
 import TitleForm from './_components/title-form';
 import CategoryForm from './_components/category-form';
 import ImageForm from './_components/image-form';
+import JobLink from './_components/job-link';
 
 const JobDetailsPage = async ({ params }: { params: { jobId: string } }) => {
   const validObjectRegex = /^[0-9a-fA-F]{24}$/;
@@ -38,7 +39,7 @@ const JobDetailsPage = async ({ params }: { params: { jobId: string } }) => {
     return redirect("admin/jobs");
   }
 
-  const requiredFields = [job.title, job.description, job.imageUrl, job.categoryId];
+  const requiredFields = [job.title, job.description, job.imageUrl, job.categoryId, job.jobLink];
 
   const totalFields = requiredFields.length;
   const completedFields = requiredFields.filter(Boolean).length;
@@ -95,6 +96,7 @@ const JobDetailsPage = async ({ params }: { params: { jobId: string } }) => {
             initialData={job} 
             jobId={job.id}
           />
+          <JobLink initialData={job} jobId={job.id} />
         </div>
       </div>
     </div>
