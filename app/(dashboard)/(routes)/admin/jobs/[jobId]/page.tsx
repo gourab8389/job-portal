@@ -11,6 +11,7 @@ import TitleForm from './_components/title-form';
 import CategoryForm from './_components/category-form';
 import ImageForm from './_components/image-form';
 import JobLink from './_components/job-link';
+import ShortDescription from './_components/short-description';
 
 const JobDetailsPage = async ({ params }: { params: { jobId: string } }) => {
   const validObjectRegex = /^[0-9a-fA-F]{24}$/;
@@ -97,6 +98,11 @@ const JobDetailsPage = async ({ params }: { params: { jobId: string } }) => {
             jobId={job.id}
           />
           <JobLink initialData={job} jobId={job.id} />
+
+          <ShortDescription
+          initialData={job} 
+          jobId={job.id}
+          />
         </div>
       </div>
     </div>
