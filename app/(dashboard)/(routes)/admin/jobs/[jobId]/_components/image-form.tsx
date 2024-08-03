@@ -78,7 +78,7 @@ const ImageForm = ({initialData, jobId} : ImageFormProps) => {
       ) 
       : 
       (
-      <div className="relative aspect-video mt-2">
+      <div className="relative w-full h-60 aspect-video mt-2">
         <Image
         alt="Cover Image"
         fill
@@ -98,7 +98,12 @@ const ImageForm = ({initialData, jobId} : ImageFormProps) => {
               render={({field}) => (
                 <FormItem>
                   <FormControl>
-                    <ImageUpload/>
+                    <ImageUpload
+                    value={field.value}
+                    disabled={isSubmitting}
+                    onChange={(url)=> field.onChange(url)}
+                    onRemove={()=> field.onChange("")}
+                    />
                   </FormControl>
                   <FormMessage/>
                 </FormItem>
