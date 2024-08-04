@@ -4,29 +4,27 @@ import { NextResponse } from "next/server";
 
 export const POST = async (req: Request) => {
     try {
-
         const {userId} = auth();
-
         const {name} = await req.json();
 
-        if(!userId){
-            return new NextResponse("Un-Authorized", { status: 401} );
+        if (!userId) {
+            return new NextResponse("Unauthorized", { status: 401 });
         }
-        if(!name){
-            return new NextResponse("Name is missing", { status: 401} );
+        if (!name) {
+            return new NextResponse("Name is missing", { status: 400 });
         }
         
         const company = await db.company.create({
-            data : {
+            data: {
                 userId,
                 name
             }
-        })
+        });
 
         return NextResponse.json(company);
 
     } catch (error) {
         console.log(`[COMPANY_POST] : ${error}`);
-        return new NextResponse("Internal Server Error", {status: 500});
+        return new NextResponse("Internal Server Error", { status: 500 });
     }
 }
