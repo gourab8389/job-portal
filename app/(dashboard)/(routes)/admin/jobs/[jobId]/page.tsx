@@ -16,6 +16,7 @@ import ShiftTimingForm from "./_components/shift-timing-mode";
 import HourlyRateForm from "./_components/hourly-rate-form";
 import WorkModeForm from "./_components/work-mode-form";
 import WorkExperienceForm from "./_components/work-experience-form";
+import JobDescription from "./_components/job-description";
 
 const JobDetailsPage = async ({ params }: { params: { jobId: string } }) => {
   const validObjectRegex = /^[0-9a-fA-F]{24}$/;
@@ -122,6 +123,10 @@ const JobDetailsPage = async ({ params }: { params: { jobId: string } }) => {
           <WorkModeForm initialData={job} jobId={job.id} />
 
           <WorkExperienceForm initialData={job} jobId={job.id} />
+        </div>
+
+        <div className="col-span-2">
+          <JobDescription initialData={job} jobId={job.id} />
         </div>
       </div>
     </div>
