@@ -35,7 +35,7 @@ const CompaniesOverviewPage = async () => {
     <div className='p-6'>
     <h1>hello</h1>
     <div className="flex items-end justify-end">
-      <Link href={'/admin/company/create'}>
+      <Link href={'/admin/companies/create'}>
         <Button><Plus className='w-5 h-5 mr-2'/>New Company</Button>
       </Link>
     </div>
