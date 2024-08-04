@@ -11,7 +11,8 @@ import {
   DropdownMenuTrigger,
 } from "@/components/ui/dropdown-menu"
 import { Button } from "@/components/ui/button"
-import { MoreHorizontalIcon } from "lucide-react"
+import { Eye, MoreHorizontalIcon, Pencil } from "lucide-react"
+import Link from "next/link"
 
 
 export type JobsColumns = {
@@ -60,16 +61,22 @@ export const columns: ColumnDef<JobsColumns>[] = [
         <DropdownMenu>
           <DropdownMenuTrigger asChild>
             <Button variant={'ghost'} size={"icon"}>
-              <MoreHorizontalIcon className="h-4 w-4"/>
+              <MoreHorizontalIcon className="h-4 w-4" />
             </Button>
           </DropdownMenuTrigger>
           <DropdownMenuContent>
-            <DropdownMenuLabel>My Account</DropdownMenuLabel>
-            <DropdownMenuSeparator />
-            <DropdownMenuItem>Profile</DropdownMenuItem>
-            <DropdownMenuItem>Billing</DropdownMenuItem>
-            <DropdownMenuItem>Team</DropdownMenuItem>
-            <DropdownMenuItem>Subscription</DropdownMenuItem>
+            <Link href={`/admin/jobs/${id}`}>
+              <DropdownMenuItem>
+                <Pencil className="w-4 h-4 mr-2" />
+                Edit
+              </DropdownMenuItem>
+            </Link>
+            <Link href={`/admin/jobs/${id}/applicants`}>
+              <DropdownMenuItem>
+                <Eye className="w-4 h-4 mr-2" />
+                Applicants
+              </DropdownMenuItem>
+            </Link>
           </DropdownMenuContent>
         </DropdownMenu>
 
