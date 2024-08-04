@@ -8,6 +8,7 @@ import { redirect } from 'next/navigation';
 import React from 'react'
 import CompanyNameForm from '../_components/name-form';
 import CompanyDescriptionForm from '../_components/description-form';
+import CompanyLogo from '../_components/logo-form';
 
 const CompanyEditPage = async ({ params }: { params: { companyId: string } }) => {
     const validObjectRegex = /^[0-9a-fA-F]{24}$/;
@@ -83,6 +84,7 @@ const CompanyEditPage = async ({ params }: { params: { companyId: string } }) =>
         </div>
         <CompanyNameForm initialData={company} companyId={company.id}/>
         <CompanyDescriptionForm initialData={company} companyId={company.id}/>
+        <CompanyLogo initialData={company} companyId={company.id}/>
       </div>
 
 
