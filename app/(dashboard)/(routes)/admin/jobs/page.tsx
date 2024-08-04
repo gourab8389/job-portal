@@ -49,7 +49,7 @@ const JobsPageOverview = async () => {
 
       {/* datatable */}
       <div className="mt-6">
-        <DataTable columns={columns} data={formattedJobs}/>
+        <DataTable columns={columns} data={formattedJobs} searchKey='title'/>
       </div>
       
     </div>
