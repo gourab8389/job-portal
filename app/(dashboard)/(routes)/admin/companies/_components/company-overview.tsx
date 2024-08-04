@@ -1,6 +1,6 @@
 "use client";
 
-import { Editor } from "@/components/editor"; // Ensure this is your rich text editor
+import { Editor } from "@/components/editor";
 import { Button } from "@/components/ui/button";
 import {
   Form,
@@ -14,13 +14,12 @@ import { zodResolver } from "@hookform/resolvers/zod";
 import { Company } from "@prisma/client";
 
 import axios from "axios";
-import { Copy, Lightbulb, Loader2, Pencil } from "lucide-react";
+import { Lightbulb, Loader2, Pencil } from "lucide-react";
 import { useRouter } from "next/navigation";
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import { useForm } from "react-hook-form";
 import toast from "react-hot-toast";
 import { z } from "zod";
-import sanitizeHtml from "sanitize-html";
 import { cn } from "@/lib/utils";
 import { Preview } from "@/components/preview";
 
@@ -68,23 +67,25 @@ const CompanyOverviewForm = ({ initialData, companyId }: CompanyOverviewFormProp
       setIsPrompting(true);
 
       const customPrompt = `Generate an overview content about ${rollname}. Include information about its history, purpose features, user base, and impact on the industry. Focus on Providing a compehensive yet concise summary suitable for readers unfamiliar with the platform`;
-      await getGenerativeAIResponse(customPrompt).then((data)=> {
-        data = data.replace(/^'|'$/g, "");
-        let cleanedText = data.replace(/[\*\#]/g, "");
-        setAiValue(cleanedText);
-        setIsPrompting(false);
-      })
-      
+      const data = await getGenerativeAIResponse(customPrompt);
+      const cleanedText = data.replace(/^'|'$/g, "").replace(/[\*\#]/g, "");
+      setAiValue(cleanedText);
     } catch (error) {
       console.log(error);
       toast.error("Something went wrong...");
+    } finally {
       setIsPrompting(false);
     }
   };
+
   const onCopy = () => {
     navigator.clipboard.writeText(aiValue);
     toast.success("Copied to Clipboard");
   }
+
+  useEffect(() => {
+    form.setValue("overview", aiValue);
+  }, [aiValue, form]);
 
   return (
     <div className="mt-6 border bg-neutral-100 rounded-md p-4">
@@ -116,7 +117,7 @@ const CompanyOverviewForm = ({ initialData, companyId }: CompanyOverviewFormProp
           <div className="flex items-center gap-2 my-2">
             <input
               type="text"
-              placeholder="Company Role"
+              placeholder="Company Name"
               value={rollname}
               onChange={(e) => setRollname(e.target.value)}
               className="w-full p-2 rounded-md"
@@ -144,8 +145,12 @@ const CompanyOverviewForm = ({ initialData, companyId }: CompanyOverviewFormProp
                   <FormItem>
                     <FormControl>
                       <Editor
-                        value={field.value ?? ""}
-                        onChange={(value) => field.onChange(value)}
+                        {...field}
+                        value={field.value || aiValue}
+                        onChange={(value) => {
+                          field.onChange(value);
+                          setAiValue(value);
+                        }}
                       />
                     </FormControl>
                     <FormMessage />
