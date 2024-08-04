@@ -2,13 +2,14 @@ import Banner from '@/components/banner';
 import IconBadge from '@/components/icon-badge';
 import { db } from '@/lib/db';
 import { auth } from '@clerk/nextjs/server';
-import { ArrowLeft, LayoutDashboard, ListChecks } from 'lucide-react'
+import { ArrowLeft, LayoutDashboard, ListChecks, Network } from 'lucide-react'
 import Link from 'next/link'
 import { redirect } from 'next/navigation';
 import React from 'react'
 import CompanyNameForm from '../_components/name-form';
 import CompanyDescriptionForm from '../_components/description-form';
 import CompanyLogo from '../_components/logo-form';
+import CompanySocialContactsForm from '../_components/social-contacts-form';
 
 const CompanyEditPage = async ({ params }: { params: { companyId: string } }) => {
     const validObjectRegex = /^[0-9a-fA-F]{24}$/;
@@ -89,7 +90,14 @@ const CompanyEditPage = async ({ params }: { params: { companyId: string } }) =>
 
 
       <div className="space-y-6">
+        <div className="">
+            <div className="flex items-center gap-x-2">
+                <IconBadge icon={Network}/>
+                <h2 className='text-xl'>Company Social Contacts</h2>
+            </div>
 
+            <CompanySocialContactsForm initialData={company} companyId={company.id}/>
+        </div>
       </div>
 
     </div>
