@@ -10,6 +10,7 @@ import CompanyNameForm from '../_components/name-form';
 import CompanyDescriptionForm from '../_components/description-form';
 import CompanyLogo from '../_components/logo-form';
 import CompanySocialContactsForm from '../_components/social-contacts-form';
+import CompanyCoverImageForm from '../_components/cover-image-form';
 
 const CompanyEditPage = async ({ params }: { params: { companyId: string } }) => {
     const validObjectRegex = /^[0-9a-fA-F]{24}$/;
@@ -97,6 +98,7 @@ const CompanyEditPage = async ({ params }: { params: { companyId: string } }) =>
             </div>
 
             <CompanySocialContactsForm initialData={company} companyId={company.id}/>
+            <CompanyCoverImageForm initialData={company} companyId={company.id} />
         </div>
       </div>
 
