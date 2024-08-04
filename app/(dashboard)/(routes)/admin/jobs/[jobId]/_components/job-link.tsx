@@ -24,12 +24,13 @@ const formSchema = z.object({
 
 const JobLink = ({ initialData, jobId }: JobLinkProps) => {
   const [isEditing, setIsEditing] = useState(false);
+  const [jobLink, setJobLink] = useState(initialData.jobLink);
   const router = useRouter();
 
   const form = useForm<z.infer<typeof formSchema>>({
     resolver: zodResolver(formSchema),
     defaultValues: {
-      jobLink: initialData.jobLink ?? ""
+      jobLink: jobLink ?? ""
     }
   });
 
@@ -43,8 +44,9 @@ const JobLink = ({ initialData, jobId }: JobLinkProps) => {
         return;
       }
       toast.success("Job Updated");
-      router.refresh();
+      setJobLink(values.jobLink);
       setIsEditing(false);
+      router.refresh();
     } catch (error) {
       toast.error("Something went wrong");
     }
@@ -68,7 +70,11 @@ const JobLink = ({ initialData, jobId }: JobLinkProps) => {
         </Button>
       </div>
 
-      {!isEditing && <p className="text-sm mt-2">{initialData.jobLink ?? "No link provided"}</p>}
+      {!isEditing && (
+        <p className={`text-sm mt-2 ${!jobLink && "text-neutral-500 italic"}`}>
+          {jobLink ? jobLink : "No Link Provided"}
+        </p>
+      )}
 
       {isEditing && (
         <Form {...form}>
@@ -102,3 +108,4 @@ const JobLink = ({ initialData, jobId }: JobLinkProps) => {
 };
 
 export default JobLink;
+

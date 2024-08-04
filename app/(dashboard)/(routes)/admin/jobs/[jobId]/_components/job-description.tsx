@@ -1,6 +1,6 @@
 "use client";
 
-import { Editor } from "@/components/editor";
+import { Editor } from "@/components/editor"; // Ensure this is your rich text editor
 import { Button } from "@/components/ui/button";
 import {
   Form,
@@ -9,18 +9,18 @@ import {
   FormItem,
   FormMessage,
 } from "@/components/ui/form";
-import { Textarea } from "@/components/ui/textarea";
 import getGenerativeAIResponse from "@/scripts/aistudio";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { Job } from "@prisma/client";
 
 import axios from "axios";
-import { Lightbulb, Loader2, Pencil } from "lucide-react";
+import { Copy, Lightbulb, Loader2, Pencil } from "lucide-react";
 import { useRouter } from "next/navigation";
 import { useState } from "react";
 import { useForm } from "react-hook-form";
 import toast from "react-hot-toast";
 import { z } from "zod";
+import sanitizeHtml from "sanitize-html";
 
 interface JobDescriptionProps {
   initialData: Job;
@@ -97,7 +97,10 @@ const JobDescription = ({ initialData, jobId }: JobDescriptionProps) => {
       </div>
 
       {!isEditing && (
-        <p className="text-neutral-500">{initialData.description}</p>
+        <div
+          className="text-neutral-500"
+          dangerouslySetInnerHTML={{ __html: sanitizeHtml(initialData.description || "") }}
+        />
       )}
 
       {isEditing && (
@@ -130,6 +133,7 @@ const JobDescription = ({ initialData, jobId }: JobDescriptionProps) => {
           <p className="text-xs text-muted-foreground text-right">
             Note*: Profession Name and Required Skills delimited by commas
           </p>
+
           <Form {...form}>
             <form onSubmit={form.handleSubmit(onSubmit)} className="space-y-4">
               <FormField
@@ -138,7 +142,10 @@ const JobDescription = ({ initialData, jobId }: JobDescriptionProps) => {
                 render={({ field }) => (
                   <FormItem>
                     <FormControl>
-                      <Editor {...field} />
+                      <Editor
+                        value={field.value ?? ""}
+                        onChange={(value) => field.onChange(value)}
+                      />
                     </FormControl>
                     <FormMessage />
                   </FormItem>
