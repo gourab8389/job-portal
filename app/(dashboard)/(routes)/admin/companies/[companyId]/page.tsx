@@ -7,6 +7,7 @@ import Link from 'next/link'
 import { redirect } from 'next/navigation';
 import React from 'react'
 import CompanyNameForm from '../_components/name-form';
+import CompanyDescriptionForm from '../_components/description-form';
 
 const CompanyEditPage = async ({ params }: { params: { companyId: string } }) => {
     const validObjectRegex = /^[0-9a-fA-F]{24}$/;
@@ -81,7 +82,10 @@ const CompanyEditPage = async ({ params }: { params: { companyId: string } }) =>
           <h2 className="text-xl text-neutral-700">Customize your company</h2>
         </div>
         <CompanyNameForm initialData={company} companyId={company.id}/>
+        <CompanyDescriptionForm initialData={company} companyId={company.id}/>
       </div>
+
+
       <div className="space-y-6">
 
       </div>
