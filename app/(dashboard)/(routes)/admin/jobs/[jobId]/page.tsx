@@ -1,6 +1,6 @@
 import { db } from "@/lib/db";
 import { auth } from "@clerk/nextjs/server";
-import { ArrowLeft, LayoutDashboard, ListChecks } from "lucide-react";
+import { ArrowLeft, Building2, LayoutDashboard, ListChecks } from "lucide-react";
 import Link from "next/link";
 import { redirect } from "next/navigation";
 import React from "react";
@@ -135,13 +135,21 @@ const JobDetailsPage = async ({ params }: { params: { jobId: string } }) => {
           <WorkExperienceForm initialData={job} jobId={job.id} />
         </div>
         <div className="space-y-6">
-          <div className="">
+
+          <div>
             <div className="flex items-center gap-x-2">
               <IconBadge icon={ListChecks}/>
               <h2 className="text-xl text-neutral-700">Job Requirements</h2>
             </div>
             <TagsForm initialData={job} jobId={job.id}/>
-            
+          </div>
+
+
+          <div className="">
+            <div className="flex items-center gap-x-2">
+              <IconBadge icon={Building2}/>
+              <h2 className="text-xl text-neutral-700">Company Details</h2>
+            </div>
             <CompanyForm
             initialData={{ ...job, companyId: job.companyId || "" }}
             jobId={job.id}
