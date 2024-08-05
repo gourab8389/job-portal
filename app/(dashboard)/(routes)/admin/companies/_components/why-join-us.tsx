@@ -23,25 +23,25 @@ import { z } from "zod";
 import { cn } from "@/lib/utils";
 import { Preview } from "@/components/preview";
 
-interface CompanyOverviewFormProps {
+interface WhyJoinUSFormProps {
   initialData: Company;
   companyId: string;
 }
 
 const formSchema = z.object({
-  overview: z.string().optional(),
+  whyJoinUs: z.string().optional(),
 });
 
-const CompanyOverviewForm = ({ initialData, companyId }: CompanyOverviewFormProps) => {
+const WhyJoinUSForm = ({ initialData, companyId }: WhyJoinUSFormProps) => {
   const [isEditing, setIsEditing] = useState(false);
   const [rollname, setRollname] = useState("");
-  const [aiValue, setAiValue] = useState("")
+  const [aiValue, setAiValue] = useState("");
   const [isPrompting, setIsPrompting] = useState(false);
   const router = useRouter();
 
   const form = useForm<z.infer<typeof formSchema>>({
     resolver: zodResolver(formSchema),
-    defaultValues: { overview: initialData.overview || "" },
+    defaultValues: { whyJoinUs: initialData.whyJoinUs || "" },
   });
 
   const { isSubmitting, isValid } = form.formState;
@@ -66,9 +66,18 @@ const CompanyOverviewForm = ({ initialData, companyId }: CompanyOverviewFormProp
     try {
       setIsPrompting(true);
 
-      const customPrompt = `Generate an overview content about ${rollname}. Include information about its history, purpose features, user base, and impact on the industry. Focus on Providing a compehensive yet concise summary suitable for readers unfamiliar with the platform`;
+      const customPrompt = `Please create a comprehensive yet concise "Why Join Us" section for a company named ${rollname}. This section should include the following details:
+1. Company Overview: Briefly introduce the company, including its history, mission, and core values.
+2. Culture and Work Environment: Describe the company culture, including the work environment, team dynamics, and any unique cultural aspects.
+3. Career Growth and Opportunities: Highlight the opportunities for career advancement, professional development, and any training programs offered.
+4. Benefits and Perks: Detail the benefits and perks provided to employees, such as health insurance, retirement plans, remote work options, wellness programs, and other incentives.
+5. Impact and Innovation: Explain the company's impact on the industry and community, including any innovative projects, contributions, or recognitions.
+6. Employee Testimonials: Optionally include one or two brief testimonials from current employees about their experiences working at the company.
+
+Make sure the content is engaging and tailored to attract potential employees who share the company's values and vision.`;
+
       const data = await getGenerativeAIResponse(customPrompt);
-      const cleanedText = data.replace(/^'|'$/g, "").replace(/[\*\#]/g, "");
+      const cleanedText = data.replace(/^'|'$/g, "").replace(/[*#]/g, "").replace(/\n/g, " ");
       setAiValue(cleanedText);
     } catch (error) {
       console.log(error);
@@ -84,30 +93,30 @@ const CompanyOverviewForm = ({ initialData, companyId }: CompanyOverviewFormProp
   }
 
   useEffect(() => {
-    form.setValue("overview", aiValue);
+    form.setValue("whyJoinUs", aiValue);
   }, [aiValue, form]);
 
   return (
     <div className="mt-6 border bg-neutral-100 rounded-md p-4">
       <div className="font-medium flex items-center justify-between">
-        Company Overview
+        Why Join Us
         <Button onClick={toggleEditing} variant={"ghost"}>
           {isEditing ? (
             "Cancel"
           ) : (
             <>
               <Pencil className="w-4 h-4 mr-2" />
-              Edit Overview
+              Edit
             </>
           )}
         </Button>
       </div>
 
       {!isEditing && (
-        <div className={cn("text-sm mt-2", !initialData.overview && "text-neutral-500 italic")}>
-          {!initialData.overview && "No overview"}
-          {initialData.overview && (
-            <Preview value={initialData.overview}/>
+        <div className={cn("text-sm mt-2", !initialData.whyJoinUs && "text-neutral-500 italic")}>
+          {!initialData.whyJoinUs && "No details"}
+          {initialData.whyJoinUs && (
+            <Preview value={initialData.whyJoinUs}/>
           )}
         </div>
       )}
@@ -133,14 +142,14 @@ const CompanyOverviewForm = ({ initialData, companyId }: CompanyOverviewFormProp
             )}
           </div>
           <p className="text-xs text-muted-foreground text-right">
-            Note*: Type the company name where overhere to generate the overview content
+            Note*: Type the company name over here to generate the whyJoinUs content
           </p>
 
           <Form {...form}>
             <form onSubmit={form.handleSubmit(onSubmit)} className="space-y-4">
               <FormField
                 control={form.control}
-                name="overview"
+                name="whyJoinUs"
                 render={({ field }) => (
                   <FormItem>
                     <FormControl>
@@ -170,4 +179,4 @@ const CompanyOverviewForm = ({ initialData, companyId }: CompanyOverviewFormProp
   );
 };
 
-export default CompanyOverviewForm;
+export default WhyJoinUSForm;

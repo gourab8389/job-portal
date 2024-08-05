@@ -12,6 +12,7 @@ import CompanyLogo from '../_components/logo-form';
 import CompanySocialContactsForm from '../_components/social-contacts-form';
 import CompanyCoverImageForm from '../_components/cover-image-form';
 import CompanyOverviewForm from '../_components/company-overview';
+import WhyJoinUSForm from '../_components/why-join-us';
 
 const CompanyEditPage = async ({ params }: { params: { companyId: string } }) => {
     const validObjectRegex = /^[0-9a-fA-F]{24}$/;
@@ -105,6 +106,9 @@ const CompanyEditPage = async ({ params }: { params: { companyId: string } }) =>
 
         <div className="col-span-2">
             <CompanyOverviewForm initialData={company} companyId={company.id}/>
+        </div>
+        <div className="col-span-2">
+          <WhyJoinUSForm initialData={company} companyId={company.id}/>
         </div>
     </div>
   </div>
