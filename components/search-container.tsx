@@ -1,12 +1,46 @@
 "use client"
 
 import { Search, X } from "lucide-react";
-import { useState } from "react"
+import { useEffect, useState } from "react"
 import { Input } from "./ui/input";
 import { Button } from "./ui/button";
+import { usePathname, useRouter, useSearchParams } from "next/navigation";
+import { useDebounce } from "@/hooks/use-debounce";
+import qs from "query-string"
 
 const SearchContainer = () => {
-    const [value, setValue] = useState("");
+
+    const searchParams = useSearchParams();
+    const router = useRouter();
+    const pathname = usePathname();
+
+    const currentCategoryId = searchParams.get("categoryId");
+    const currentTitle = searchParams.get("title");
+    const createdAtFilter = searchParams.get("createdAtFilter");
+    const currentShiftTiming = searchParams.get("shiftTiming");
+    const currentWorkMode = searchParams.get("workMode")
+
+
+
+    const [value, setValue] = useState(currentTitle || "");
+
+    const debounceValue = useDebounce(value)
+
+    useEffect(()=> {
+        const url = qs.stringifyUrl({
+           url : pathname,
+           query : {
+            title: debounceValue,
+            categoryId : currentCategoryId,
+            createdAtFilter : createdAtFilter,
+            shiftTiming : currentShiftTiming,
+            workMode : currentWorkMode
+           } 
+        }, {
+            skipNull : true,
+            skipEmptyString : true
+        }) 
+    },[])
 
     return (
         <>
