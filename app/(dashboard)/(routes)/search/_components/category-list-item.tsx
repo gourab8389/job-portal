@@ -35,8 +35,8 @@ const CategoryListItem = ({label, value} : CategoriesListItemProps) => {
     <Button type="button" 
     onClick={onClick}
     variant={"outline"} 
-    className={cn("whitespace-nowrap text-sm tracking-wide text-muted-foreground border px-2 py-[2px] rounded-md hover:bg-purple-700 hover:text-white transition cursor-pointer hover:shadow-md",
-    isSelected && "bg-purple-700 text-white shadow-md"
+    className={cn("whitespace-nowrap text-sm tracking-wide text-muted-foreground border px-2 py-[2px] rounded-md hover:bg-blue-700 hover:text-white transition cursor-pointer hover:shadow-md",
+    isSelected && "bg-blue-700 text-white shadow-md"
     )}>
         {label}
     </Button>

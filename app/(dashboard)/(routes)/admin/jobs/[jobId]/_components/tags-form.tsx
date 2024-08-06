@@ -94,7 +94,7 @@ const TagsForm = ({ initialData, jobId }: TagsFormProps) => {
       <div className="flex items-center flex-wrap gap-2">
         {initialData.tags.length > 0 ? (
           initialData.tags.map((tag, index)=>(
-            <div className="text-xs flex items-center gap-1 whitespace-nowrap py-1 px-2 rounded-md bg-purple-100" key={index}>{tag}</div>
+            <div className="text-xs flex items-center gap-1 whitespace-nowrap py-1 px-2 rounded-md bg-blue-100" key={index}>{tag}</div>
           ))
         ) : (
           <p className="text-xs text-neutral-500 italic">No Tags</p>
@@ -118,7 +118,7 @@ const TagsForm = ({ initialData, jobId }: TagsFormProps) => {
 
         <div className="flex items-center gap-2 flex-wrap">
         {jobTags.length > 0 ? (jobTags.map((tag, index)=>(
-          <div key={index} className="text-xs flex items-center gap-1 whitespace-nowrap py-1 px-2 rounded-md bg-purple-100">{tag} {isEditing && (
+          <div key={index} className="text-xs flex items-center gap-1 whitespace-nowrap py-1 px-2 rounded-md bg-blue-100">{tag} {isEditing && (
             <Button variant={"ghost"} className="p-0 h-auto" onClick={()=>handleTagRemove(index)}>
               <X className="h-3 w-3"/>
             </Button>

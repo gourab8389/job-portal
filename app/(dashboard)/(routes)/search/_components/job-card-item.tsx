@@ -13,6 +13,8 @@ import Image from "next/image"
 import Link from "next/link"
 import {truncate} from "lodash";
 import toast from "react-hot-toast"
+import axios from "axios"
+import { useRouter } from "next/navigation"
 
 
 interface JobCardItemProps {
@@ -31,15 +33,19 @@ const JobCardItem = ({ job, userId }: JobCardItemProps) => {
     const [isBookmarkLoading, setIsBookmarkLoading] = useState(false);
     const isSavedByUser = userId && job.savedUsers?.includes(userId)
     const SavedUsersIcon =isSavedByUser ? BookmarkCheck : Bookmark;
+    const router = useRouter()
 
     const onClickSaveJob = async () => {
         try {
             setIsBookmarkLoading(true)
             if(!isSavedByUser){
-
+                await axios.patch(`/api/jobs/${job.id}/removeJobFromCollection`);
+                toast.success("Job Removed!")
             }else{
-                
+                await axios.patch(`/api/jobs/${job.id}/saveJobToCollection`);
+                toast.success("Job Saved!")
             }
+            router.refresh();
         } catch (error) {
             toast.error("Something went wrong");
             console.log(`Error: ${(error as Error)?.message}`)

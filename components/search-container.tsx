@@ -16,7 +16,7 @@ const SearchContainer = () => {
             placeholder="Search for a job using title"
             value={value}
             onChange={(e)=>setValue(e.target.value)}
-            className="w-full pl-9 rounded-lg bg-purple-50/80 focus-visible:ring-purple-200 text-sm"
+            className="w-full pl-9 rounded-lg bg-blue-50/80 focus-visible:ring-blue-200 text-sm"
             />
             {
                 value && (
