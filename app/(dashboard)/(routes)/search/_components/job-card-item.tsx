@@ -31,14 +31,17 @@ const JobCardItem = ({ job, userId }: JobCardItemProps) => {
     const company = typeJob.company
 
     const [isBookmarkLoading, setIsBookmarkLoading] = useState(false);
+
     const isSavedByUser = userId && job.savedUsers?.includes(userId)
+
     const SavedUsersIcon =isSavedByUser ? BookmarkCheck : Bookmark;
+
     const router = useRouter()
 
     const onClickSaveJob = async () => {
         try {
             setIsBookmarkLoading(true)
-            if(!isSavedByUser){
+            if(isSavedByUser){
                 await axios.patch(`/api/jobs/${job.id}/removeJobFromCollection`);
                 toast.success("Job Removed!")
             }else{
@@ -65,7 +68,7 @@ const JobCardItem = ({ job, userId }: JobCardItemProps) => {
                         size={'icon'}
                         >
                             {isBookmarkLoading ? <Loader2 className="h-4 w-4 animate-spin" /> : <div onClick={onClickSaveJob}>
-                                <SavedUsersIcon className={cn("w-4 h-4")} />
+                                <SavedUsersIcon className={cn("w-4 h-4", isSavedByUser ? "text-emerald-500":"text-muted-foreground")} />
                                 </div>}
                         </Button>
                     </Box>

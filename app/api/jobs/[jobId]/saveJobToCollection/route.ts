@@ -29,7 +29,7 @@ export const PATCH = async (
             return new NextResponse("Job not found", { status: 404 })
         }
 
-        const updateData = {
+        const updatedData = {
             savedUsers : job.savedUsers ? {push : userId} : {userId}
         }
 
@@ -38,7 +38,7 @@ export const PATCH = async (
                 id: jobId,
                 userId
             },
-            data : updateData
+            data : updatedData
         })
 
 
