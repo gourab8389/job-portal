@@ -24,13 +24,13 @@ const NavbarRoutes = () => {
     )}
     <div className="flex gap-x-2 ml-auto">
         {isAdminPage || isPlayerPage ? (<Link href={'/'}>
-            <Button variant={'outline'} size={'sm'} className="border-purple-700/20">
+            <Button variant={'outline'} size={'sm'} className="border-blue-700/20">
                 <LogOut/>
                 Exit
             </Button>
         </Link>) : (
             <Link href={'/admin/jobs'}>
-            <Button variant={'outline'} size={'sm'} className="border-purple-700/20">
+            <Button variant={'outline'} size={'sm'} className="border-blue-700/20">
                 Admin Mode
             </Button>
         </Link>

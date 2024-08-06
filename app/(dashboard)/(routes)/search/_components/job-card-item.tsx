@@ -11,6 +11,7 @@ import { BookmarkCheck, BriefcaseBusiness, Currency, Layers, Loader2, Network } 
 import { cn, formattedString } from "@/lib/utils"
 import Image from "next/image"
 import Link from "next/link"
+import {truncate} from "lodash";
 
 
 interface JobCardItemProps {
@@ -53,7 +54,7 @@ const JobCardItem = ({ job, userId }: JobCardItemProps) => {
                         </div>
                         <div className="w-full">
                             <p className="text-stone-700 font-semibold text-base w-full">{job.title}</p>
-                            <Link href={`/company/${company?.id}`} className="text-xs text-purple-500 w-full truncate">
+                            <Link href={`/company/${company?.id}`} className="text-xs text-blue-500 w-full truncate">
                             {company?.name}
                             </Link>
                         </div>
@@ -88,9 +89,30 @@ const JobCardItem = ({ job, userId }: JobCardItemProps) => {
 
                     {job.short_description && (
                         <CardDescription className="text-xs">
-                            {job.short_description}
+                            {truncate(job.short_description, {
+                                length: 130,
+                                omission: "..."
+                            })}
                         </CardDescription>
                     )}
+
+                    {job.tags.length > 0 && (
+                        <Box className="flex-wrap justify-start gap-1">
+                            {job.tags.slice(0,6).map((tag, i)=> (
+                                <p className="bg-gray-100 text-xs rounded-md px-2 py-[2px] font-semibold text-neutral-500" key={i}>{tag}</p>
+                            ))}
+                        </Box>
+                    )}
+
+                    <Box className="gap-2 mt-auto">
+                        <Link href={`/search/${job.id}`} className="w-full">
+                        <Button className="w-full border border-blue-500 text-blue-500 hover:bg-transparent hover:text-blue-600 " variant={"outline"}>Details</Button>
+                        </Link>
+
+                        <Button className="w-full hover:bg-blue-800 bg-blue-800/80 text-white" variant={"outline"}>
+                            Save
+                        </Button>
+                    </Box>
                 </div>
             </Card>
 
