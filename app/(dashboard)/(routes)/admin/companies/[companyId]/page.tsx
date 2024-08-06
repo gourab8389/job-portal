@@ -1,10 +1,10 @@
 import IconBadge from '@/components/icon-badge';
 import { db } from '@/lib/db';
 import { auth } from '@clerk/nextjs/server';
-import { ArrowLeft, LayoutDashboard, Network } from 'lucide-react'
-import Link from 'next/link'
+import { ArrowLeft, LayoutDashboard, Network } from 'lucide-react';
+import Link from 'next/link';
 import { redirect } from 'next/navigation';
-import React from 'react'
+import React from 'react';
 import CompanyNameForm from '../_components/name-form';
 import CompanyDescriptionForm from '../_components/description-form';
 import CompanyLogo from '../_components/logo-form';
@@ -14,7 +14,7 @@ import CompanyOverviewForm from '../_components/company-overview';
 import WhyJoinUSForm from '../_components/why-join-us';
 
 const CompanyEditPage = async ({ params }: { params: { companyId: string } }) => {
-    const validObjectRegex = /^[0-9a-fA-F]{24}$/;
+  const validObjectRegex = /^[0-9a-fA-F]{24}$/;
   if (!validObjectRegex.test(params.companyId)) {
     return redirect("/admin/companies");
   }
@@ -25,19 +25,26 @@ const CompanyEditPage = async ({ params }: { params: { companyId: string } }) =>
     return redirect("/");
   }
 
-  const company = await db.company.findUnique({
-    where: {
-      id: params.companyId,
-      userId,
-    },
-  });
+  let company, categories;
 
-  const categories = await db.category.findMany({
-    orderBy: { name: "asc" },
-  });
+  try {
+    company = await db.company.findUnique({
+      where: {
+        id: params.companyId,
+        userId,
+      },
+    });
 
-  if (!company) {
-    return redirect("admin/companies");
+    categories = await db.category.findMany({
+      orderBy: { name: "asc" },
+    });
+
+    if (!company) {
+      return redirect("/admin/companies");
+    }
+  } catch (error) {
+    console.error("Error fetching company data:", error);
+    return redirect("/admin/companies");
   }
 
   const requiredFields = [
@@ -53,7 +60,6 @@ const CompanyEditPage = async ({ params }: { params: { companyId: string } }) =>
     company.state,
     company.overview,
     company.whyJoinUs,
-    
   ];
 
   const totalFields = requiredFields.length;
@@ -61,57 +67,56 @@ const CompanyEditPage = async ({ params }: { params: { companyId: string } }) =>
   const completionText = `(${completedFields}/${totalFields})`;
 
   const isComplete = requiredFields.every(Boolean);
+
   return (
     <div className="p-6">
-    <Link href={"/admin/companies"}>
-      <div className="flex items-center gap-3 text-sm text-neutral-500">
-        <ArrowLeft className="w-4 h-4" />
-        Back
-      </div>
-    </Link>
-
-    <div className="flex items-center justify-between my-4">
-      <div className="flex flex-col gap-y-2">
-        <h1 className="text-2xl font-medium">Company Setup</h1>
-        <span className="text-sm text-neutral-500">
-          Complete All Fields {completionText}
-        </span>
-      </div>
-    </div>
-
-    <div className="grid grid-cols-1 md:grid-cols-2 gap-6 mt-16">
-      <div>
-        <div className="flex items-center gap-x-2">
-          <IconBadge icon={LayoutDashboard} />
-          <h2 className="text-xl text-neutral-700">Customize your company</h2>
+      <Link href={"/admin/companies"}>
+        <div className="flex items-center gap-3 text-sm text-neutral-500">
+          <ArrowLeft className="w-4 h-4" />
+          Back
         </div>
-        <CompanyNameForm initialData={company} companyId={company.id}/>
-        <CompanyDescriptionForm initialData={company} companyId={company.id}/>
-        <CompanyLogo initialData={company} companyId={company.id}/>
+      </Link>
+
+      <div className="flex items-center justify-between my-4">
+        <div className="flex flex-col gap-y-2">
+          <h1 className="text-2xl font-medium">Company Setup</h1>
+          <span className="text-sm text-neutral-500">
+            Complete All Fields {completionText}
+          </span>
+        </div>
       </div>
 
+      <div className="grid grid-cols-1 md:grid-cols-2 gap-6 mt-16">
+        <div>
+          <div className="flex items-center gap-x-2">
+            <IconBadge icon={LayoutDashboard} />
+            <h2 className="text-xl text-neutral-700">Customize your company</h2>
+          </div>
+          <CompanyNameForm initialData={company} companyId={company.id} />
+          <CompanyDescriptionForm initialData={company} companyId={company.id} />
+          <CompanyLogo initialData={company} companyId={company.id} />
+        </div>
 
-      <div className="space-y-6">
-        <div className="">
+        <div className="space-y-6">
+          <div>
             <div className="flex items-center gap-x-2">
-                <IconBadge icon={Network}/>
-                <h2 className='text-xl'>Company Social Contacts</h2>
+              <IconBadge icon={Network} />
+              <h2 className="text-xl">Company Social Contacts</h2>
             </div>
-
-            <CompanySocialContactsForm initialData={company} companyId={company.id}/>
+            <CompanySocialContactsForm initialData={company} companyId={company.id} />
             <CompanyCoverImageForm initialData={company} companyId={company.id} />
+          </div>
+        </div>
+
+        <div className="col-span-2">
+          <CompanyOverviewForm initialData={company} companyId={company.id} />
+        </div>
+        <div className="col-span-2">
+          <WhyJoinUSForm initialData={company} companyId={company.id} />
         </div>
       </div>
-
-        <div className="col-span-2">
-            <CompanyOverviewForm initialData={company} companyId={company.id}/>
-        </div>
-        <div className="col-span-2">
-          <WhyJoinUSForm initialData={company} companyId={company.id}/>
-        </div>
     </div>
-  </div>
-  )
-}
+  );
+};
 
-export default CompanyEditPage
+export default CompanyEditPage;
