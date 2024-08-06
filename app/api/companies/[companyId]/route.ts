@@ -7,29 +7,29 @@ export const PATCH = async (req: Request, { params }: { params: { companyId: str
     const { userId } = auth();
     const { companyId } = params;
 
-    const updatedValues = await req.json();
-
     if (!userId) {
-      return new NextResponse("Unauthorized", { status: 401 });
+      return NextResponse.json({ message: "Unauthorized" }, { status: 401 });
     }
+
     if (!companyId) {
-      return new NextResponse("Id is missing", { status: 401 });
+      return NextResponse.json({ message: "Id is missing" }, { status: 401 });
     }
+
+    const updatedValues = await req.json();
 
     const company = await db.company.update({
       where: {
         id: companyId,
         userId,
       },
-      data:{
-        ...updatedValues
-      } ,
+      data: {
+        ...updatedValues,
+      },
     });
 
     return NextResponse.json(company);
-
   } catch (error) {
-    console.log(`[COMPANY_PATCH] : ${error}`);
-    return new NextResponse("Internal Server Error", { status: 500 });
+    console.error(`[COMPANY_PATCH] : ${error}`);
+    return NextResponse.json({ message: "Internal Server Error" }, { status: 500 });
   }
 };

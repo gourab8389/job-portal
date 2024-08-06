@@ -25,25 +25,14 @@ const CompanyEditPage = async ({ params }: { params: { companyId: string } }) =>
     return redirect("/");
   }
 
-  let company, categories;
+  const company = await db.company.findUnique({
+    where: {
+      id: params.companyId,
+      userId,
+    },
+  });
 
-  try {
-    company = await db.company.findUnique({
-      where: {
-        id: params.companyId,
-        userId,
-      },
-    });
-
-    categories = await db.category.findMany({
-      orderBy: { name: "asc" },
-    });
-
-    if (!company) {
-      return redirect("/admin/companies");
-    }
-  } catch (error) {
-    console.error("Error fetching company data:", error);
+  if (!company) {
     return redirect("/admin/companies");
   }
 
@@ -66,11 +55,9 @@ const CompanyEditPage = async ({ params }: { params: { companyId: string } }) =>
   const completedFields = requiredFields.filter(Boolean).length;
   const completionText = `(${completedFields}/${totalFields})`;
 
-  const isComplete = requiredFields.every(Boolean);
-
   return (
     <div className="p-6">
-      <Link href={"/admin/companies"}>
+      <Link href="/admin/companies">
         <div className="flex items-center gap-3 text-sm text-neutral-500">
           <ArrowLeft className="w-4 h-4" />
           Back
