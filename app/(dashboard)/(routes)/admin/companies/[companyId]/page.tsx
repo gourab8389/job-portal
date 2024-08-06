@@ -1,8 +1,7 @@
-import Banner from '@/components/banner';
 import IconBadge from '@/components/icon-badge';
 import { db } from '@/lib/db';
 import { auth } from '@clerk/nextjs/server';
-import { ArrowLeft, LayoutDashboard, ListChecks, Network } from 'lucide-react'
+import { ArrowLeft, LayoutDashboard, Network } from 'lucide-react'
 import Link from 'next/link'
 import { redirect } from 'next/navigation';
 import React from 'react'
