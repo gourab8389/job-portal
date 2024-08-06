@@ -7,11 +7,12 @@ import Box from "@/components/box"
 import { formatDistanceToNow } from "date-fns"
 import { useState } from "react"
 import { Button } from "@/components/ui/button"
-import { BookmarkCheck, BriefcaseBusiness, Currency, Layers, Loader2, Network } from "lucide-react"
+import { Bookmark, BookmarkCheck, BriefcaseBusiness, Currency, Layers, Loader2, Network } from "lucide-react"
 import { cn, formattedString } from "@/lib/utils"
 import Image from "next/image"
 import Link from "next/link"
 import {truncate} from "lodash";
+import toast from "react-hot-toast"
 
 
 interface JobCardItemProps {
@@ -28,15 +29,38 @@ const JobCardItem = ({ job, userId }: JobCardItemProps) => {
     const company = typeJob.company
 
     const [isBookmarkLoading, setIsBookmarkLoading] = useState(false);
-    const SavedUsersIcon = BookmarkCheck
+    const isSavedByUser = userId && job.savedUsers?.includes(userId)
+    const SavedUsersIcon =isSavedByUser ? BookmarkCheck : Bookmark;
+
+    const onClickSaveJob = async () => {
+        try {
+            setIsBookmarkLoading(true)
+            if(!isSavedByUser){
+
+            }else{
+                
+            }
+        } catch (error) {
+            toast.error("Something went wrong");
+            console.log(`Error: ${(error as Error)?.message}`)
+        }finally{
+            setIsBookmarkLoading(false)
+        }
+    }
+
     return (
         <motion.div layout>
             <Card>
                 <div className="w-full h-full flex flex-col items-start justify-start gap-y-4 p-4">
                     <Box className="">
                         <p className="text-sm text-muted-foreground">{formatDistanceToNow(new Date(job.createdAt), { addSuffix: true })}</p>
-                        <Button variant={'ghost'} size={'icon'}>
-                            {isBookmarkLoading ? <Loader2 className="h-4 w-4 animate-spin" /> : <SavedUsersIcon className={cn("w-4 h-4")} />}
+                        <Button 
+                        variant={'ghost'} 
+                        size={'icon'}
+                        >
+                            {isBookmarkLoading ? <Loader2 className="h-4 w-4 animate-spin" /> : <div onClick={onClickSaveJob}>
+                                <SavedUsersIcon className={cn("w-4 h-4")} />
+                                </div>}
                         </Button>
                     </Box>
 
@@ -109,8 +133,12 @@ const JobCardItem = ({ job, userId }: JobCardItemProps) => {
                         <Button className="w-full border border-blue-500 text-blue-500 hover:bg-transparent hover:text-blue-600 " variant={"outline"}>Details</Button>
                         </Link>
 
-                        <Button className="w-full hover:bg-blue-800 bg-blue-800/80 text-white" variant={"outline"}>
-                            Save
+                        <Button 
+                        className="w-full hover:bg-blue-800 bg-blue-800/80 text-white hover:text-white" 
+                        variant={"outline"}
+                        onClick={onClickSaveJob}
+                        >
+                            {isSavedByUser ? "Saved": "Save For Later"}
                         </Button>
                     </Box>
                 </div>
