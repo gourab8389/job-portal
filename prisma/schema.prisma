@@ -1,6 +1,7 @@
 
 generator client {
   provider = "prisma-client-js"
+  previewFeatures = ["fullTextIndex", "fullTextSearch"]
 }
 
 datasource db {
@@ -32,6 +33,7 @@ model Job{
   updatedAt DateTime @default(now())
   @@index([categoryId])
   @@index([companyId])
+  @@fulltext([title])
 }
 
 model Company {
@@ -63,4 +65,31 @@ model Category{
   jobs Job[]
   createdAt DateTime @default(now())
   updatedAt DateTime @default(now())
+}
+
+
+model userProfile {
+  userId String @id @map("_id")
+  fullName String?
+  email String?
+  contact String?
+  appliedJobs AppliedJob[]
+  resumes Resumes[]
+  activeResumeId String?
+}
+
+type AppliedJob{
+  jobId String
+  appliedAt DateTime @default(now())
+}
+
+model Resumes {
+  id String @id @default(auto()) @map("_id") @db.ObjectId
+  name String
+  url String
+  userProfileId String
+  userProfile userProfile @relation(fields: [userProfileId], references:  [userId], onDelete : Cascade)
+  createdAt DateTime @default(now())
+  updatedAt DateTime @default(now())
+  @@index([userProfileId], name : "idx_userProfileId")
 }
