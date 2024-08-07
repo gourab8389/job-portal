@@ -39,8 +39,17 @@ const SearchContainer = () => {
         }, {
             skipNull : true,
             skipEmptyString : true
-        }) 
-    },[])
+        });
+        router.push(url) 
+    },[
+        debounceValue,
+        currentCategoryId,
+        router,
+        pathname,
+        createdAtFilter,
+        currentShiftTiming,
+        currentWorkMode
+    ])
 
     return (
         <>
@@ -54,7 +63,11 @@ const SearchContainer = () => {
             />
             {
                 value && (
-                    <Button variant={"ghost"} size={"icon"} type="button" onClick={() => setValue("")}
+                    <Button 
+                    variant={"ghost"} 
+                    size={"icon"} 
+                    type="button" 
+                    onClick={() => setValue("")}
                     className="cursor-pointer absolute right-3 hover:scale-125 hover:bg-transparent"
                     >
                         <X className="w-4 h-4"/>
