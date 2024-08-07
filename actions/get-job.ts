@@ -96,6 +96,26 @@ export const getJobs = async ({
             }
         }
 
+
+        let formattedWorkingModes = workMode?.split(',')
+
+        if(formattedWorkingModes && formattedWorkingModes.length > 0){
+            query.where.workMode = {
+                in : formattedWorkingModes,
+            }
+        }
+
+
+        let formattedExperience = yearsOfExperience?.split(',')
+
+        if(formattedExperience && formattedExperience.length > 0){
+            query.where.yearsOfExperience = {
+                in : formattedExperience,
+            }
+        }
+
+
+
         const jobs = await db.job.findMany(query)
         return jobs;
 
