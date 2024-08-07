@@ -88,8 +88,16 @@ export const getJobs = async ({
             }
         }
 
+        let formattedShiftTiming = shiftTiming?.split(',')
+
+        if(formattedShiftTiming && formattedShiftTiming.length > 0){
+            query.where.shiftTiming = {
+                in : formattedShiftTiming,
+            }
+        }
+
         const jobs = await db.job.findMany(query)
-        return jobs
+        return jobs;
 
     } catch (error) {
         console.log("[GET_JOBS]:", error)
