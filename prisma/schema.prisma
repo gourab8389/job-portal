@@ -68,7 +68,7 @@ model Category{
 }
 
 
-model userProfile {
+model UserProfile {
   userId String @id @map("_id")
   fullName String?
   email String?
@@ -88,7 +88,7 @@ model Resumes {
   name String
   url String
   userProfileId String
-  userProfile userProfile @relation(fields: [userProfileId], references:  [userId], onDelete : Cascade)
+  userProfile UserProfile @relation(fields: [userProfileId], references:  [userId], onDelete : Cascade)
   createdAt DateTime @default(now())
   updatedAt DateTime @default(now())
   @@index([userProfileId], name : "idx_userProfileId")

@@ -5,7 +5,7 @@ import React from "react"
 
 interface BoxProps {
     children : React.ReactNode,
-    className : string
+    className? : string
 }
 
 const Box = ({children, className}: BoxProps) => {
