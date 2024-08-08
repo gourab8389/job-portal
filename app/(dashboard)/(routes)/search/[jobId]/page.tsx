@@ -29,7 +29,7 @@ const ApplyJobPage = async ({params} : {params : {jobId : string}}) => {
 
   return (
     <div className="flex-col p-4 md:p-8">
-      <JobDetailsPageContent/>
+      <JobDetailsPageContent job={job} jobId={job.id} userProfile={profile}/>
     </div>
   )
 }
