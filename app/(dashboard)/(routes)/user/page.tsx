@@ -5,6 +5,7 @@ import Image from 'next/image'
 import { redirect } from 'next/navigation'
 import React from 'react'
 import NameForm from './_components/name-form'
+import { db } from '@/lib/db'
 
 const ProfilePage = async () => {
 
@@ -14,6 +15,19 @@ const ProfilePage = async () => {
     if (!userId) {
         redirect("/sigin-in")
     }
+    
+    let profile = await db.userProfile.findUnique({
+        where : {
+            userId
+        },
+        include : {
+            resumes : {
+                orderBy: {
+                    createdAt : "desc"
+                }
+            }
+        }
+    })
 
     return (
         <div className='flex-col p-4 md:p-8 items-center justify-center flex'>
@@ -32,7 +46,7 @@ const ProfilePage = async () => {
                             />
                         </div>
                     )}
-                <NameForm />
+                <NameForm initialData={profile} userId={userId}/>
             </Box>
         </div>
     )
