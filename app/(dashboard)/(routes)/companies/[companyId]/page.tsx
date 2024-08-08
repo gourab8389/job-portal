@@ -48,7 +48,7 @@ const CompanyDetailPage = async ({
         </div>
       )}
 
-      <CompanyDetailContentPage/>
+      <CompanyDetailContentPage userId={userId} jobs={jobs} company={company}/>
     </div>
   )
 }
