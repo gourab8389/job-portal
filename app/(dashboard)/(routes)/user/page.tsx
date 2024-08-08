@@ -6,6 +6,7 @@ import { redirect } from 'next/navigation'
 import React from 'react'
 import NameForm from './_components/name-form'
 import { db } from '@/lib/db'
+import EmailForm from './_components/email-form'
 
 const ProfilePage = async () => {
 
@@ -34,7 +35,7 @@ const ProfilePage = async () => {
             <Box>
                 <CustomBreadCrumb breadCrumbPage='My-Profile' />
             </Box>
-            <Box className='flex-col p-4 rounded-md mt-8 w-full space-y-6'>
+            <Box className='flex-col p-4 rounded-md mt-8 w-full space-y-6 border'>
                 {
                     user && user.hasImage && (
                         <div className="aspect-square w-24 h-24 rounded-full shadow-md relative overflow-hidden">
@@ -47,6 +48,7 @@ const ProfilePage = async () => {
                         </div>
                     )}
                 <NameForm initialData={profile} userId={userId}/>
+                <EmailForm initialData={profile} userId={userId}/>
             </Box>
         </div>
     )

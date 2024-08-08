@@ -15,16 +15,16 @@ import { useForm } from "react-hook-form"
 import toast from "react-hot-toast"
 import { z } from "zod"
 
-interface NameFormProps {
+interface EmailFormProps {
     initialData: UserProfile | null
     userId: string
 }
 
 const formSchema = z.object({
-  fullName: z.string().min(1,{message: "Full Name is required"}),
+  email: z.string().min(1,{message: "Email is required"}),
 })
 
-const NameForm = ({initialData, userId} : NameFormProps) => {
+const EmailForm = ({initialData, userId} : EmailFormProps) => {
 
   const [isEditing, setIsEditing] = useState(false);
   const router = useRouter();
@@ -32,7 +32,7 @@ const NameForm = ({initialData, userId} : NameFormProps) => {
   const form = useForm<z.infer<typeof formSchema>>({
     resolver : zodResolver(formSchema),
     defaultValues: {
-        fullName: initialData?.fullName || ""
+        email: initialData?.email || ""
     }
   })
 
@@ -58,9 +58,9 @@ const NameForm = ({initialData, userId} : NameFormProps) => {
   return (
     <Box>
         {!isEditing && (
-            <div className={cn("text-lg mt-2 flex items-center gap-2", !initialData?.fullName && "text-neutral-500 italic" )}>
+            <div className={cn("text-lg mt-2 flex items-center gap-2", !initialData?.email && "text-neutral-500 italic" )}>
                 <UserCircle className="w-4 h-4 mr-2"/>
-                {initialData?.fullName ? initialData.fullName: "No full Name"}
+                {initialData?.email ? initialData.email: "No full Name"}
             </div>
         )}
         {isEditing &&  (
@@ -68,14 +68,15 @@ const NameForm = ({initialData, userId} : NameFormProps) => {
                     <form onSubmit={form.handleSubmit(onSubmit)} className="flex items-center gap-2 flex-1">
                       <FormField 
                         control={form.control}
-                        name="fullName"
+                        name="email"
                         render={({field}) => (
                           <FormItem className="w-full">
                             <FormControl>
                               <Input
                                 disabled={isSubmitting}
-                                placeholder="e.g 'name'"
+                                placeholder="e.g 'xyz@gmail.com'"
                                 {...field}
+                                type="email"
                               />
                             </FormControl>
                             <FormMessage/>
@@ -104,4 +105,4 @@ const NameForm = ({initialData, userId} : NameFormProps) => {
   )
 }
 
-export default NameForm
+export default EmailForm
