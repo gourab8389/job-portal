@@ -3,9 +3,12 @@
 import { Button } from "@/components/ui/button";
 import { cn } from "@/lib/utils";
 import { Company, Job } from "@prisma/client"
+import axios from "axios";
 import { Loader2, Plus } from "lucide-react";
 import Image from "next/image";
+import { useRouter } from "next/navigation";
 import React, { useState } from "react";
+import toast from "react-hot-toast";
 
 interface CompanyDetailContentPageProps {
     userId : string | null;
@@ -19,9 +22,26 @@ const CompanyDetailContentPage = ({userId, company, jobs} : CompanyDetailContent
     const isFollower = userId && company?.followers?.includes(userId)
 
     const [isLoading, setIsLoading] = useState(false)
+    const router = useRouter()
 
     const onClickAddRemoveFollowers = async () => {
-
+        try {
+            setIsLoading(true)
+            if(isFollower){
+                await axios.patch(`/api/companies/${company.id}/removeFollower`)
+                toast.success("Un-followed")
+                router.refresh();
+            }else{
+                await axios.patch(`/api/companies/${company.id}/addFollower`)
+                toast.success("Following")
+                router.refresh();
+            }
+        } catch (error) {
+            console.log("Error : ", error);
+            toast.error((error as Error)?.message)
+        }finally{
+            setIsLoading(false)
+        }
     }
 
   return (
@@ -73,12 +93,12 @@ const CompanyDetailContentPage = ({userId, company, jobs} : CompanyDetailContent
             </div>
 
 
-            <Button onClick={onClickAddRemoveFollowers} className={cn("w-24 rounded-full hover:shadow-md flex items-center justify-center border bg-blue-500", !isFollower && "bg-blue-600 hover:bg-blue-700")} variant={isFollower ? "outline" : "default"}>
+            <Button onClick={onClickAddRemoveFollowers} className={cn("w-24 rounded-full hover:shadow-md flex items-center justify-center border bg-blue-500 text-white", !isFollower && "bg-blue-600 hover:bg-blue-700 text-white")} variant={isFollower ? "outline" : "default"}>
                 {isLoading ? (<Loader2 className="w-3 h-3 animate-spin"/>) : 
                 (<React.Fragment>
                     {isFollower ? "Unfollow" : 
                     <React.Fragment>
-                        <Plus className="w-4 h-4 mr-2"/> Follow
+                        <Plus className="w-6 h-6 mr-2"/> Follow
                     </React.Fragment> 
                     }
                 </React.Fragment>)}
