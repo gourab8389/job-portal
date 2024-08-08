@@ -7,6 +7,7 @@ import React from 'react'
 import NameForm from './_components/name-form'
 import { db } from '@/lib/db'
 import EmailForm from './_components/email-form'
+import ContactForm from './_components/contact-form'
 
 const ProfilePage = async () => {
 
@@ -49,6 +50,7 @@ const ProfilePage = async () => {
                     )}
                 <NameForm initialData={profile} userId={userId}/>
                 <EmailForm initialData={profile} userId={userId}/>
+                <ContactForm initialData={profile} userId={userId}/>
             </Box>
         </div>
     )

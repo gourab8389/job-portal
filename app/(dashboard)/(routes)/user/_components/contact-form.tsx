@@ -15,16 +15,16 @@ import { useForm } from "react-hook-form"
 import toast from "react-hot-toast"
 import { z } from "zod"
 
-interface EmailFormProps {
+interface ContactFormProps {
     initialData: UserProfile | null
     userId: string
 }
 
 const formSchema = z.object({
-  email: z.string().min(1,{message: "Email is required"}),
+  contact: z.string().min(1,{message: "Contact is required"}),
 })
 
-const EmailForm = ({initialData, userId} : EmailFormProps) => {
+const ContactForm = ({initialData, userId} : ContactFormProps) => {
 
   const [isEditing, setIsEditing] = useState(false);
   const router = useRouter();
@@ -32,7 +32,7 @@ const EmailForm = ({initialData, userId} : EmailFormProps) => {
   const form = useForm<z.infer<typeof formSchema>>({
     resolver : zodResolver(formSchema),
     defaultValues: {
-        email: initialData?.email || ""
+        contact: initialData?.contact || ""
     }
   })
 
@@ -58,9 +58,9 @@ const EmailForm = ({initialData, userId} : EmailFormProps) => {
   return (
     <Box>
         {!isEditing && (
-            <div className={cn("text-lg mt-2 flex items-center gap-2", !initialData?.email && "text-neutral-500 italic" )}>
+            <div className={cn("text-lg mt-2 flex items-center gap-2", !initialData?.contact && "text-neutral-500 italic" )}>
                 <UserCircle className="w-4 h-4 mr-2"/>
-                {initialData?.email ? initialData.email: "No Email"}
+                {initialData?.contact ? initialData.contact: "No Contact"}
             </div>
         )}
         {isEditing &&  (
@@ -68,15 +68,14 @@ const EmailForm = ({initialData, userId} : EmailFormProps) => {
                     <form onSubmit={form.handleSubmit(onSubmit)} className="flex items-center gap-2 flex-1">
                       <FormField 
                         control={form.control}
-                        name="email"
+                        name="contact"
                         render={({field}) => (
                           <FormItem className="w-full">
                             <FormControl>
                               <Input
                                 disabled={isSubmitting}
-                                placeholder="e.g 'xyz@gmail.com'"
+                                placeholder="e.g '0000 1111'"
                                 {...field}
-                                type="email"
                               />
                             </FormControl>
                             <FormMessage/>
@@ -105,4 +104,4 @@ const EmailForm = ({initialData, userId} : EmailFormProps) => {
   )
 }
 
-export default EmailForm
+export default ContactForm
