@@ -6,6 +6,7 @@ import HomeSearchContainer from "../_components/home-search-container"
 import Image from "next/image"
 import HomeScreenCategories from "../_components/home-screen-categories-container"
 import HomeCompanyList from "../_components/home-companies-list"
+import RecommendedJobList from "../_components/recommended-jobs"
 
 
 const DashboardHomePage = async () => {
@@ -48,6 +49,8 @@ const DashboardHomePage = async () => {
       <HomeScreenCategories categories={categories}/>
 
       <HomeCompanyList  companies={companies}/>
+
+      <RecommendedJobList jobs={jobs.splice(0,6)} userId={userId}/>
     </div>
   )
 }
