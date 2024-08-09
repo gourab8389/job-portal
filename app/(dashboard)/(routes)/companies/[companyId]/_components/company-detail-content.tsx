@@ -9,6 +9,7 @@ import Image from "next/image";
 import { useRouter } from "next/navigation";
 import React, { useState } from "react";
 import toast from "react-hot-toast";
+import TabContentSection from "./tab-content-section";
 
 interface CompanyDetailContentPageProps {
     userId : string | null;
@@ -104,6 +105,9 @@ const CompanyDetailContentPage = ({userId, company, jobs} : CompanyDetailContent
                 </React.Fragment>)}
             </Button>
         </div>
+
+
+        <TabContentSection userId={userId} jobs={jobs} company={company}/>
      </div>
     </div>
   )

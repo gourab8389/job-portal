@@ -26,7 +26,17 @@ const CompanyDetailPage = async ({
         redirect("/")
     }
 
-    const jobs = await getJobs({})
+    const jobs = await db.job.findMany({
+      where : {
+        companyId : params.companyId
+      },
+      include: {
+        company: true
+      },
+      orderBy : {
+        createdAt: "desc"
+      }
+    })
 
   return (
     <div className='flex-col'>
