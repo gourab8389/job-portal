@@ -48,7 +48,7 @@ const CompanyDetailContentPage = ({userId, company, jobs} : CompanyDetailContent
   return (
     <div className="w-full rounded-2xl bg-white p-4 z-50 -mt-8">
      <div className="flex-col w-full px-4">
-        <div className="w-full flex items-center justify-between -mt-12">
+        <div className="w-full flex items-center justify-between md:-mt-12">
             <div className="flex items-end justify-end space-x-4">
                 {company?.logo && (
                     <div className="aspect-square w-auto bg-white h-32 rounded-2xl border items-center justify-center flex relative overflow-hidden p-3">
@@ -94,7 +94,7 @@ const CompanyDetailContentPage = ({userId, company, jobs} : CompanyDetailContent
             </div>
 
 
-            <Button onClick={onClickAddRemoveFollowers} className={cn("w-24 rounded-full hover:shadow-md flex items-center justify-center border bg-blue-500 text-white", !isFollower && "bg-blue-600 hover:bg-blue-700 text-white")} variant={isFollower ? "outline" : "default"}>
+            <Button onClick={onClickAddRemoveFollowers} className={cn("w-[4.5rem] md:w-24 rounded-full hover:shadow-md flex items-center justify-center border bg-blue-500 text-white", !isFollower && "bg-blue-600 hover:bg-blue-700 text-white")} variant={isFollower ? "outline" : "default"}>
                 {isLoading ? (<Loader2 className="w-3 h-3 animate-spin"/>) : 
                 (<React.Fragment>
                     {isFollower ? "Unfollow" : 
