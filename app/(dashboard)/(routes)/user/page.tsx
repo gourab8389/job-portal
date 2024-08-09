@@ -8,6 +8,8 @@ import NameForm from './_components/name-form'
 import { db } from '@/lib/db'
 import EmailForm from './_components/email-form'
 import ContactForm from './_components/contact-form'
+import { Card, CardDescription, CardTitle } from '@/components/ui/card'
+import { truncate } from 'lodash'
 
 const ProfilePage = async () => {
 
@@ -31,6 +33,17 @@ const ProfilePage = async () => {
         }
     })
 
+    const FollowedCompanies = db.company.findMany({
+        where : {
+            followers: {
+                has : userId
+            }
+        },
+        orderBy :{
+            createdAt:"desc"
+        }
+    })
+
     return (
         <div className='flex-col p-4 md:p-8 items-center justify-center flex'>
             <Box>
@@ -51,6 +64,40 @@ const ProfilePage = async () => {
                 <NameForm initialData={profile} userId={userId}/>
                 <EmailForm initialData={profile} userId={userId}/>
                 <ContactForm initialData={profile} userId={userId}/>
+            </Box>
+            <Box className='flex-col items-start justify-start mt-12'>
+                    <h2 className='text-2xl text-muted-foreground font-semibold'>
+                        Followed Companies
+                    </h2>
+                    <div className="mt-6 w-full grid grid-cols-1 md:grid-cols-3 2xl:grid-cols-6 gap-2">
+                    {(await FollowedCompanies).length == 0 ? <p className='italic'>No Companies Followed yet</p> : <React.Fragment>
+                        {(await FollowedCompanies).map(com => (
+                            <Card className='p-3 space-y-2 relative' key={com.id}>
+                                {
+                                    com.logo && (
+                                        <div className="w-full h-24 flex items-center justify-center relative overflow-hidden">
+                                            <Image
+                                            fill
+                                            alt='Logo'
+                                            src={com.logo}
+                                            className='object-contain w-full h-full'
+                                            />
+                                        </div>
+                                    )
+                                }
+                                <CardTitle className='text-lg text-center'>{com.name}</CardTitle>
+                                {com.description && (
+                                    <CardDescription>
+                                        {truncate(com.description, {
+                                            length : 80,
+                                            omission:"..."
+                                        })}
+                                    </CardDescription>
+                                )}
+                            </Card>
+                        ))}
+                    </React.Fragment>}
+                    </div>
             </Box>
         </div>
     )
