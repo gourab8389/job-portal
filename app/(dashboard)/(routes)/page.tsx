@@ -5,6 +5,7 @@ import { auth } from "@clerk/nextjs/server"
 import HomeSearchContainer from "../_components/home-search-container"
 import Image from "next/image"
 import HomeScreenCategories from "../_components/home-screen-categories-container"
+import HomeCompanyList from "../_components/home-companies-list"
 
 
 const DashboardHomePage = async () => {
@@ -45,6 +46,8 @@ const DashboardHomePage = async () => {
       </Box>
 
       <HomeScreenCategories categories={categories}/>
+
+      <HomeCompanyList  companies={companies}/>
     </div>
   )
 }
