@@ -3,6 +3,8 @@ import Box from "@/components/box"
 import { db } from "@/lib/db"
 import { auth } from "@clerk/nextjs/server"
 import HomeSearchContainer from "../_components/home-search-container"
+import Image from "next/image"
+import HomeScreenCategories from "../_components/home-screen-categories-container"
 
 
 const DashboardHomePage = async () => {
@@ -32,6 +34,17 @@ const DashboardHomePage = async () => {
         </p>
       </Box>
       <HomeSearchContainer/>
+
+      <Box className="relative overflow-hidden h-[22rem] justify-center rounded-lg mt-12">
+        <Image
+        src="/img/job-portal-banner.jpg"
+        alt="Home Banner"
+        fill
+        className="object-cover w-full h-full"
+        />
+      </Box>
+
+      <HomeScreenCategories categories={categories}/>
     </div>
   )
 }
