@@ -4,7 +4,7 @@ const Analytics = () => {
   return (
     <div className='items-center justify-center p-5'>
       <h1>This is Analytics page</h1>
-      <p>for now it's not needed</p>
+      <p>for now it&apos;s not needed</p>
     </div>
   )
 }
